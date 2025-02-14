@@ -101,20 +101,21 @@ DimPlot(nsclc_seu, reduction = 'umap')
 #plot with cluster labels. Clustered close based on gene expression profile
 DimPlot(nsclc_seu, reduction = 'umap', label=TRUE)
 
-#Find markers for cluster 2
-
-cluster2.markers <- FindAllMarkers(nsclc_seu)
-
-#avg_log2FC = 2.69 → This means NKG7 is upregulated in cluster 0 compared to other clusters. A log2 fold change of 2.69 suggests that its expression is significantly higher in this cluster.
-#95.3% of the cells in cluster 0 express NKG7
-FeaturePlot(nsclc_seu, features = "NKG7") + 
-  DimPlot(nsclc_seu, reduction = "umap", label = TRUE, repel = TRUE)
 
 
-FeaturePlot(nsclc_seu, features = "NKG7", label = TRUE)  
-VlnPlot(nsclc_seu, features = "NKG7", group.by = "seurat_clusters")  
+# Find markers with a log fold change threshold and p-value filter
+markers <- FindAllMarkers(
+  nsclc_seu,
+  logfc.threshold = 0.25,  # Filter for genes with log fold change greater than 0.25
+  min.pct = 0.1,           # Genes must be detected in at least 10% of cells
+  p_val_adj = 0.05         # Adjusted p-value threshold (e.g., 0.05 for significance)
+)
 
-#we see that cells 0,1,3 highly express NKG7 which may serve as a reason for why they cluster together
+#We can plot to see differential expression and clustering 
+FeaturePlot(nsclc_seu, features="NKG7") +
+  DimPlot(nsclc_seu, reduction = 'umap')
 
+FeaturePlot(nsclc_seu, features = "NKG7", label = TRUE)  +
+  VlnPlot(nsclc_seu, features = "NKG7", group.by = "seurat_clusters") 
 
 
