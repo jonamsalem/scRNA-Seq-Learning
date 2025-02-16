@@ -116,7 +116,7 @@ for (i in 1:length(onb_list)){
 
 features <- SelectIntegrationFeatures(onb_list) #Identify genes across patient subset.
 
-#find integration anchors (CCA)
+#find integration anchors (CCA). Can try MNN instead.
 anchors <- FindIntegrationAnchors(onb_list, anchor.features=features) #Anchors are pairs of cells one from each dataset/subset that are similar in terms of gene expression. Helps to align dataset by shared biological features. 
 
 #integrate data
