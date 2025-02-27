@@ -8,4 +8,4 @@
 
 `Harmony` - use Harmony to correct batch effects and integrate data from different conditions.
 
-`Markers` - find markers using both FindConservedMarkers(across clusters but persistnet per condition), and FindMarkers (between conditions) in order to find differential expressed markers and to annotate cells. 
+`Cell-Markers` - find markers using both FindConservedMarkers(across clusters but persistnet per condition), and FindMarkers (between conditions) in order to find differential expressed markers and to annotate cells. 
