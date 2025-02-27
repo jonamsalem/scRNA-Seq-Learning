@@ -5,3 +5,5 @@
 `Integration` - Check and Corrects batch effects by identifying shared features across patients, aligning datasets using canonical correlation analysis (CCA), and generating an integrated Seurat object for unbiased clustering and visualization.
 
 `Doublets` -  detect and remove doublets in single-cell RNA sequencing data. Doublets occur when two cells are captured within the same droplet, leading to mixed gene expression profiles.
+
+`Harmony` - use Harmony to correct batch effects and integrate data from different conditions.
