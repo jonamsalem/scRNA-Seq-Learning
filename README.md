@@ -7,3 +7,5 @@
 `Doublets` -  detect and remove doublets in single-cell RNA sequencing data. Doublets occur when two cells are captured within the same droplet, leading to mixed gene expression profiles.
 
 `Harmony` - use Harmony to correct batch effects and integrate data from different conditions.
+
+`Markers` - find markers using both FindConservedMarkers(across clusters but persistnet per condition), and FindMarkers (between conditions) in order to find differential expressed markers and to annotate cells. 
