@@ -18,13 +18,12 @@
 
 
 library(Seurat)
-library(ggplot2)
-library(tidyverse)
-library(gridExtra)
+library(ggplot2) #plotting
+library(tidyverse) #data manipulation
+library(gridExtra) #arrange plots
 
 
-#get data location
-
+#get data location. Immediate subdirectories are the folders with the data
 dirs <- list.dirs(path="scRNA-Integration/feature_data/", recursive = F, full.names = F) #7 directories
 
 
@@ -40,8 +39,7 @@ for(x in dirs){
 }
 
 
-#merge all objects so we can perform QC and filtering simoultaneously
-
+#merge all objects so we can perform QC and filtering simultaneously
 merged_seurat <- merge(
   HB17_background_, 
   y = c(HB17_PDX_, HB17_tumor_, HB30_PDX_, HB30_tumor_, HB53_background_, HB53_tumor_),
@@ -77,11 +75,10 @@ merged_seurat <- subset(merged_seurat, subset = nCount_RNA > 800 & nFeature_RNA 
 merged_seurat <- NormalizeData(object = merged_seurat ) #adjust for sequencing depth between cells
 merged_seurat <- FindVariableFeatures(object = merged_seurat) #Identify most variable genes across all cells. Default is 2000
 merged_seurat <- ScaleData(merged_seurat) #standardize the genes to remove noise from varying gene expression level and ensures that each gene contributes equally to wownstream analyis.
-
 merged_seurat <- RunPCA(merged_seurat) #Reduce dimensionality of data for visualization. Assumes linear-relationship between varaibles.
 
-
 ElbowPlot(merged_seurat) #Use all 20
+
 
 merged_seurat <- FindNeighbors(merged_seurat, dims=1:20) #Identify cells similar to each other based on gene expression profile
 merged_seurat<- FindClusters( merged_seurat) #Group cells into clusters based on values from FindNeighbors. 
@@ -89,7 +86,7 @@ merged_seurat <- RunUMAP(merged_seurat, dims= 1:20) #Reduce dimensionality to vi
 
 
 
-#plot  cells by patient
+#plot cells by patient
 p1<-DimPlot(merged_seurat, reduction='umap', group.by='Patient') #Cells from same patient cluster together ---> batch effect (cluster by non-biological effect)
 
 #plot cells by tissue type
@@ -112,11 +109,11 @@ for (i in 1:length(onb_list)){
 }
 
 
-#select integration features
-
+#select integration features. Identify set of genes that are highly variable across all patients. Chosen bc they are biological relevant and can be used to align datasets 
 features <- SelectIntegrationFeatures(onb_list) #Identify genes across patient subset.
 
 #find integration anchors (CCA). Can try MNN instead.
+# CCA : linear relationship. Find relationships between gene expression profiles of cells from different datasets.
 anchors <- FindIntegrationAnchors(onb_list, anchor.features=features) #Anchors are pairs of cells one from each dataset/subset that are similar in terms of gene expression. Helps to align dataset by shared biological features. 
 
 #integrate data
